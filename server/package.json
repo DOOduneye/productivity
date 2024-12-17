@@ -1,39 +1,38 @@
 {
   "name": "server",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "",
   "main": "dist/src/app.js",
   "types": "dist/src/app.d.ts",
   "type": "module",
-  "files": [
-    "dist/src"
-  ],
   "license": "Apache-2.0",
-  "keywords": [],
   "scripts": {
-    "dev": "tsx watch src/app.ts",
-    "start": "node dist/src/app.js",
+    "dev": "tsx watch --env-file=.env src/app.ts",
+    "start": "yarn compile && node --env-file=.env dist/src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "gts lint",
-    "clean": "gts clean",
-    "compile": "tsc",
     "fix": "gts fix",
+    "compile": "tsc",
+    "clean": "gts clean",
     "prepare": "yarn run compile",
     "pretest": "yarn run compile",
-    "posttest": "yarn run lint"
+    "posttest": "yarn run lint",
+    "push": "yarn run drizzle-kit push",
+    "introspect": "yarn run drizzle-kit pull",
+    "generate": "yarn run drizzle-kit generate",
+    "migrate": "yarn run drizzle-kit migrate",
+    "studio": "yarn run drizzle-kit studio"
   },
   "devDependencies": {
-    "@types/node": "^22.7.5",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "drizzle-kit": "^0.30.1",
     "gts": "^6.0.2",
-    "tsup": "^8.3.5",
     "tsx": "^4.19.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.47.7",
-    "@types/dotenv": "^8.2.3",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
     "drizzle-orm": "^0.38.2",
     "express": "^4.21.2",
     "postgres": "^3.4.5"
