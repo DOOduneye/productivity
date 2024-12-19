@@ -1,24 +1,24 @@
+import type { InferSelectModel } from 'drizzle-orm';
 import {
-  index,
+  boolean,
   integer,
   pgEnum,
-  pgTable as table,
   serial,
+  pgTable as table,
   timestamp,
-  boolean,
-  varchar,
+  varchar
 } from 'drizzle-orm/pg-core';
-import type {InferSelectModel} from 'drizzle-orm';
-import {timestamps} from './schema.helpers.js';
+
+import { timestamps } from './schema.helpers.js';
 
 // TODO: Add more status levels
 export const statusEnum = pgEnum('status', [
   // "backlog"
   'todo',
-  'in_pro',
+  'active',
   // "review",
   // "blocked",
-  'completed',
+  'completed'
   // "archived"
 ]);
 
@@ -28,13 +28,13 @@ export const priorityEnum = pgEnum('priority', ['low', 'medium', 'high']);
 export const milestones = table('milestones', {
   ...timestamps,
   id: serial('id').primaryKey(),
-  title: varchar('title', {length: 100}).notNull(),
-  description: varchar('description', {length: 1000}),
+  title: varchar('title', { length: 100 }).notNull(),
+  description: varchar('description', { length: 1000 }),
   priority: priorityEnum('priority').notNull().default('medium'),
   start_date: timestamp('start_date'),
   end_date: timestamp('end_date'),
   status: statusEnum('status').notNull().default('todo'),
-  completed: boolean('completed').notNull().default(false),
+  completed: boolean('completed').notNull().default(false)
 });
 
 // TODO: Cyclic relationship in the future.
