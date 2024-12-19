@@ -9,8 +9,8 @@ import {
   uniqueIndex,
   varchar,
 } from 'drizzle-orm/pg-core';
-import {InferSelectModel} from 'drizzle-orm';
-import {timestamps} from './schema.helpers';
+import type {InferSelectModel} from 'drizzle-orm';
+import {timestamps} from './schema.helpers.js';
 
 // TODO: Add more status levels
 export const statusEnum = pgEnum('status', [
