@@ -64,6 +64,7 @@ export default function MilestoneCard({ milestone }: { milestone: Milestone }) {
               </DropdownMenuContent>
             </DropdownMenu>
             <Button variant="ghost" size="icon" onClick={() => setExpanded(!expanded)}>
+            <Button variant="ghost" size="icon" onClick={() => setExpanded(!expanded)}>
               {expanded ? (
                 <ChevronUpIcon className="h-4 w-4" />
               ) : (
@@ -98,6 +99,7 @@ export default function MilestoneCard({ milestone }: { milestone: Milestone }) {
         {expanded && (
           <>
             <div className="flex flex-col gap-2">
+              <p className="text-sm text-muted-foreground">{milestone.description}</p>
               <p className="text-sm text-muted-foreground">{milestone.description}</p>
             </div>
 
