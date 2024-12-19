@@ -6,16 +6,17 @@ import {
   serial,
   timestamp,
   boolean,
+  uniqueIndex,
   varchar,
 } from 'drizzle-orm/pg-core';
-import type {InferSelectModel} from 'drizzle-orm';
-import {timestamps} from './schema.helpers.js';
+import {InferSelectModel} from 'drizzle-orm';
+import {timestamps} from './schema.helpers';
 
 // TODO: Add more status levels
 export const statusEnum = pgEnum('status', [
   // "backlog"
   'todo',
-  'in_pro',
+  'active',
   // "review",
   // "blocked",
   'completed',
