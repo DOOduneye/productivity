@@ -1,13 +1,14 @@
+import { drizzle } from 'drizzle-orm/postgres-js';
 import express from 'express';
-import {drizzle} from 'drizzle-orm/postgres-js';
+import type { Request, Response } from 'express';
 import postgres from 'postgres';
-import {TaskController} from './tasks/controller.js';
-import {TaskService} from './tasks/service.js';
-import type {Request, Response} from 'express';
-import {MilestoneService} from './milestones/service.js';
-import {MilestoneController} from './milestones/controller.js';
-import {createTaskRouter} from './tasks/route.js';
-import {createMilestoneRouter} from './milestones/route.js';
+
+import { MilestoneController } from './milestones/controller.js';
+import { createMilestoneRouter } from './milestones/route.js';
+import { MilestoneService } from './milestones/service.js';
+import { TaskController } from './tasks/controller.js';
+import { createTaskRouter } from './tasks/route.js';
+import { TaskService } from './tasks/service.js';
 
 const app = express();
 const port = process.env.PORT || '8000';

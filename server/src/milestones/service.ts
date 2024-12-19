@@ -1,15 +1,16 @@
-import {PostgresJsDatabase} from 'drizzle-orm/postgres-js';
+import { and, eq } from 'drizzle-orm';
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import type { RowList } from 'postgres';
+
 import {
   type Milestone,
-  tasks,
-  milestones,
-  type Status,
   type Priority,
+  type Status,
   type Task,
+  milestones,
+  tasks
 } from '../db/schema.js';
-import {eq, and} from 'drizzle-orm';
-import type {RowList} from 'postgres';
-import type {MilestoneFilters} from './controller.js';
+import type { MilestoneFilters } from './controller.js';
 
 export interface IMilestoneService {
   getMilestones(filters?: MilestoneFilters): Promise<Milestone[]>;
@@ -35,8 +36,8 @@ export class MilestoneService implements IMilestoneService {
             : undefined,
           filters?.priority
             ? eq(milestones.priority, filters.priority as Priority)
-            : undefined,
-        ),
+            : undefined
+        )
       );
   }
 
@@ -60,7 +61,7 @@ export class MilestoneService implements IMilestoneService {
   async createMilestoneTask(milestoneId: number, task: Task) {
     return await this.db
       .insert(tasks)
-      .values({...task, milestone_id: milestoneId});
+      .values({ ...task, milestone_id: milestoneId });
   }
 
   async updateMilestone(id: number, milestone: Milestone) {
