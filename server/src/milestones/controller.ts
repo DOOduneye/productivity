@@ -11,7 +11,7 @@ export type MilestoneFilters = z.infer<typeof MilestoneFiltersSchema>;
 
 export class MilestoneController {
   constructor(private readonly milestoneService: IMilestoneService) {}
-  
+
   getMilestones = async (req: Request, res: Response) => {
     try {
       const result = MilestoneFiltersSchema.safeParse({
@@ -86,9 +86,26 @@ export class MilestoneController {
     } catch (error) {
       res.status(500).json({error: 'Failed to update milestone'});
     }
+    try {
+      const {id} = req.params;
+      const milestone = await this.milestoneService.updateMilestone(
+        Number(id),
+        req.body,
+      );
+      res.status(200).json(milestone);
+    } catch (error) {
+      res.status(500).json({error: 'Failed to update milestone'});
+    }
   };
 
   deleteMilestone = async (req: Request, res: Response) => {
+    try {
+      const {id} = req.params;
+      await this.milestoneService.deleteMilestone(Number(id));
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({error: 'Failed to delete milestone'});
+    }
     try {
       const {id} = req.params;
       await this.milestoneService.deleteMilestone(Number(id));

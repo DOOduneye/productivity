@@ -23,15 +23,6 @@ export class TaskController {
     }
   };
 
-  createTask = async (req: Request, res: Response) => {
-    try {
-      const task = await this.taskService.createTask(req.body);
-      res.status(201).json(task);
-    } catch (error) {
-      res.status(500).json({error: 'Failed to create task'});
-    }
-  };
-
   updateTask = async (req: Request, res: Response) => {
     try {
       const {id} = req.params;
