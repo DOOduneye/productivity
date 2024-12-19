@@ -23,7 +23,7 @@ export interface IMilestoneService {
 
 export class MilestoneService implements IMilestoneService {
   constructor(private readonly db: PostgresJsDatabase<Record<string, never>>) {}
-  
+
   async getMilestones(filters?: MilestoneFilters) {
     return await this.db
       .select()
