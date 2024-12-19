@@ -28,16 +28,7 @@ app.get('/health', (_: Request, res: Response) => {
 });
 
 app.get('/milestones', milestoneController.getMilestones);
-app.get('/milestones/:id', milestoneController.getMilestone);
-app.post('/milestones', milestoneController.createMilestone);
-app.put('/milestones/:id', milestoneController.updateMilestone);
-app.delete('/milestones/:id', milestoneController.deleteMilestone);
-
 app.get('/tasks', taskController.getTasks);
-app.get('/tasks/:id', taskController.getTask);
-app.post('/tasks', taskController.createTask);
-app.put('/tasks/:id', taskController.updateTask);
-app.delete('/tasks/:id', taskController.deleteTask);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

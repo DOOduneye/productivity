@@ -1,76 +1,14 @@
 import {PostgresJsDatabase} from 'drizzle-orm/postgres-js';
-import {
-  type Milestone,
-  tasks,
-  milestones,
-  type Status,
-  type Priority,
-  type Task,
-} from '../db/schema.js';
-import {eq, and} from 'drizzle-orm';
-import type {RowList} from 'postgres';
-import type {MilestoneFilters} from './controller.js';
+import {milestones} from '../db/schema';
 
 export interface IMilestoneService {
-  getMilestones(filters?: MilestoneFilters): Promise<Milestone[]>;
-  getMilestone(id: number): Promise<Milestone | undefined>;
-  getMilestoneTasks(id: number): Promise<Task[]>;
-  createMilestone(milestone: Milestone): Promise<Milestone[]>;
-  createMilestoneTask(milestoneId: number, task: Task): Promise<Task[]>;
-  updateMilestone(id: number, milestone: Milestone): Promise<Milestone[]>;
-  deleteMilestone(id: number): Promise<RowList<never[]>>;
+  getMilestones(): Promise<(typeof milestones.$inferSelect)[]>;
 }
 
 export class MilestoneService implements IMilestoneService {
   constructor(private readonly db: PostgresJsDatabase<Record<string, never>>) {}
 
-  async getMilestones(filters?: MilestoneFilters) {
-    return await this.db
-      .select()
-      .from(milestones)
-      .where(
-        and(
-          filters?.status
-            ? eq(milestones.status, filters.status as Status)
-            : undefined,
-          filters?.priority
-            ? eq(milestones.priority, filters.priority as Priority)
-            : undefined,
-        ),
-      );
-  }
-
-  async getMilestone(id: number) {
-    return await this.db
-      .select()
-      .from(milestones)
-      .where(eq(milestones.id, id))
-      .limit(1)
-      .then(([milestone]) => milestone);
-  }
-
-  async getMilestoneTasks(id: number) {
-    return await this.db.select().from(tasks).where(eq(tasks.milestone_id, id));
-  }
-
-  async createMilestone(milestone: Milestone) {
-    return await this.db.insert(milestones).values(milestone);
-  }
-
-  async createMilestoneTask(milestoneId: number, task: Task) {
-    return await this.db
-      .insert(tasks)
-      .values({...task, milestone_id: milestoneId});
-  }
-
-  async updateMilestone(id: number, milestone: Milestone) {
-    return await this.db
-      .update(milestones)
-      .set(milestone)
-      .where(eq(milestones.id, id));
-  }
-
-  async deleteMilestone(id: number) {
-    return await this.db.delete(milestones).where(eq(milestones.id, id));
+  async getMilestones() {
+    return await this.db.select().from(milestones);
   }
 }
