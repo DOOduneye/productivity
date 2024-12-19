@@ -1,5 +1,13 @@
-import {Request, Response} from 'express';
-import {IMilestoneService} from './service';
+import type {Request, Response} from 'express';
+import type {IMilestoneService} from './service';
+import {z} from 'zod';
+
+const MilestoneFiltersSchema = z.object({
+  status: z.enum(['todo', 'active', 'completed']).optional(),
+  priority: z.enum(['low', 'medium', 'high']).optional(),
+});
+
+export type MilestoneFilters = z.infer<typeof MilestoneFiltersSchema>;
 
 export class MilestoneController {
   constructor(private readonly milestoneService: IMilestoneService) {}
