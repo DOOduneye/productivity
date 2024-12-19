@@ -1,3 +1,4 @@
+import {PostgresJsDatabase} from 'drizzle-orm/postgres-js';
 import {
   type Milestone,
   tasks,
