@@ -1,24 +1,11 @@
 import { useState } from 'react';
 
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  CirclePlay,
-  MoreVerticalIcon,
-  Pen
-} from 'lucide-react';
+import { ChevronDownIcon, ChevronUpIcon, CirclePlay, MoreVerticalIcon, Pen } from 'lucide-react';
 
 import { Milestone } from '../../../server/src/db/schema';
-import TaskList from './task-list';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from './ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -75,11 +62,7 @@ export default function MilestoneCard({ milestone }: { milestone: Milestone }) {
                 <DropdownMenuItem>High</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setExpanded(!expanded)}
-            >
+            <Button variant="ghost" size="icon" onClick={() => setExpanded(!expanded)}>
               {expanded ? (
                 <ChevronUpIcon className="h-4 w-4" />
               ) : (
@@ -114,9 +97,7 @@ export default function MilestoneCard({ milestone }: { milestone: Milestone }) {
         {expanded && (
           <>
             <div className="flex flex-col gap-2">
-              <p className="text-sm text-muted-foreground">
-                {milestone.description}
-              </p>
+              <p className="text-sm text-muted-foreground">{milestone.description}</p>
             </div>
 
             {/* <div className="space-y-2">

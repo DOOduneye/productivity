@@ -1,18 +1,10 @@
 import { useState } from 'react';
 
 import { Priority, priorityEnum } from '../../../server/src/db/schema';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from './ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 export default function PriorityComponent() {
-  const [selectedPriority, setSelectedPriority] = useState<
-    Priority | 'all' | null
-  >('all');
+  const [selectedPriority, setSelectedPriority] = useState<Priority | 'all' | null>('all');
 
   return (
     <Select

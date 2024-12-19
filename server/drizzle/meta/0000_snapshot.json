@@ -150,12 +150,8 @@
           "name": "tasks_milestone_id_milestones_id_fk",
           "tableFrom": "tasks",
           "tableTo": "milestones",
-          "columnsFrom": [
-            "milestone_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["milestone_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -171,20 +167,12 @@
     "public.priority": {
       "name": "priority",
       "schema": "public",
-      "values": [
-        "low",
-        "medium",
-        "high"
-      ]
+      "values": ["low", "medium", "high"]
     },
     "public.status": {
       "name": "status",
       "schema": "public",
-      "values": [
-        "todo",
-        "active",
-        "completed"
-      ]
+      "values": ["todo", "active", "completed"]
     }
   },
   "schemas": {},

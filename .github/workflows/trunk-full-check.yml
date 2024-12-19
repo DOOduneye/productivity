@@ -1,0 +1,24 @@
+name: Weekly Full Trunk Check
+
+on:
+  schedule:
+    # Runs at 00:00 on Sunday
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  full-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trunk Check All Files
+        uses: trunk-io/trunk-action@v1
+        with:
+          check-mode: all
+          post-annotations: true

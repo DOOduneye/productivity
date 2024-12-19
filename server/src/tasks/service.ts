@@ -1,7 +1,8 @@
-import {PostgresJsDatabase} from 'drizzle-orm/postgres-js';
-import {type Task, tasks} from '../db/schema.js';
-import {eq} from 'drizzle-orm';
-import {type RowList} from 'postgres';
+import { eq } from 'drizzle-orm';
+import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import { type RowList } from 'postgres';
+
+import { type Task, tasks } from '../db/schema.js';
 
 export interface ITaskService {
   getTasks(): Promise<Task[]>;

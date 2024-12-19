@@ -1,33 +1,26 @@
 {
-    "compilerOptions": {
-        /* Base options */
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipLibCheck": true,
-        "target": "ES2022",
-        "verbatimModuleSyntax": true,
-        "allowJs": true,
-        "resolveJsonModule": true,
-        "moduleDetection": "force",
-        /* Strictness */
-        "strict": true,
-        "noUncheckedIndexedAccess": true,
-        /* Transpilation with TypeScript */
-        "moduleResolution": "NodeNext",
-        "module": "NodeNext",
-        "lib": [
-            "ES2023"
-        ],
-        "pretty": true,
-        "sourceMap": true,
-        "rootDir": ".",
-        "outDir": "build",
-    },
-    "include": [
-        "src/**/*.ts",
-        "test/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+  "compilerOptions": {
+    /* Base options */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "target": "ES2022",
+    "verbatimModuleSyntax": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    /* Transpilation with TypeScript */
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
+    "lib": ["ES2023"],
+    "pretty": true,
+    "sourceMap": true,
+    "rootDir": ".",
+    "outDir": "build"
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts", "drizzle.config.ts"],
+  "exclude": ["node_modules"]
 }
