@@ -1,25 +1,27 @@
 {
     "compilerOptions": {
-        "allowUnreachableCode": false,
-        "allowUnusedLabels": false,
-        "composite": true,
+        /* Base options */
+        "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "target": "ES2022",
+        "verbatimModuleSyntax": true,
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "moduleDetection": "force",
+        /* Strictness */
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        /* Transpilation with TypeScript */
+        "moduleResolution": "NodeNext",
+        "module": "NodeNext",
         "lib": [
             "ES2023"
         ],
-        "module": "commonjs",
-        "noEmitOnError": true,
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitReturns": true,
         "pretty": true,
         "sourceMap": true,
-        "stripInternal": true,
-        "strict": true,
-        "target": "ES2022",
-        "esModuleInterop": true,
         "rootDir": ".",
         "outDir": "build",
-        "skipLibCheck": true,
     },
     "include": [
         "src/**/*.ts",

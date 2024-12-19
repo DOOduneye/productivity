@@ -50,3 +50,6 @@ export const tasks = table('tasks', {
 
 export type Milestone = InferSelectModel<typeof milestones>;
 export type Task = InferSelectModel<typeof tasks>;
+
+export type Status = (typeof statusEnum.enumValues)[number];
+export type Priority = (typeof priorityEnum.enumValues)[number];
