@@ -1,5 +1,5 @@
 import type {Request, Response} from 'express';
-import type {IMilestoneService} from './service';
+import type {IMilestoneService} from './service.js';
 import {z} from 'zod';
 
 const MilestoneFiltersSchema = z.object({

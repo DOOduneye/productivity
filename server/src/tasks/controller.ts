@@ -1,5 +1,5 @@
-import {Request, Response} from 'express';
-import {ITaskService} from './service';
+import type {Request, Response} from 'express';
+import type {ITaskService} from './service.js';
 
 export class TaskController {
   constructor(private readonly taskService: ITaskService) {}
