@@ -11,7 +11,7 @@ export type MilestoneFilters = z.infer<typeof MilestoneFiltersSchema>;
 
 export class MilestoneController {
   constructor(private readonly milestoneService: IMilestoneService) {}
-
+  
   getMilestones = async (req: Request, res: Response) => {
     try {
       const result = MilestoneFiltersSchema.safeParse({

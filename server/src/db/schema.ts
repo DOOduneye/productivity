@@ -15,7 +15,7 @@ import {timestamps} from './schema.helpers.js';
 export const statusEnum = pgEnum('status', [
   // "backlog"
   'todo',
-  'in_pro',
+  'active',
   // "review",
   // "blocked",
   'completed',
