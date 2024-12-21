@@ -1,9 +1,8 @@
-import {Router} from 'express';
-import {MilestoneController} from './controller.js';
+import { Router } from 'express';
 
-export function createMilestoneRouter(
-  milestoneController: MilestoneController,
-): Router {
+import { MilestoneController } from './controller.js';
+
+export function createMilestoneRouter(milestoneController: MilestoneController): Router {
   const router = Router();
 
   router.get('/', milestoneController.getMilestones);

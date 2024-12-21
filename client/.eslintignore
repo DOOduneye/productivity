@@ -1,4 +1,6 @@
+# Build output
 build/
+dist/
 
 # Dependencies
 node_modules/
@@ -7,5 +9,8 @@ node_modules/
 .cache/
 .eslintcache
 
+# UI Components (shadcn)
+components/ui/*
+
 # Environment
-.env*
+.env* 

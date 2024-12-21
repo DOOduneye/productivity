@@ -1,0 +1,49 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'server/**'
+      - '.github/workflows/backend.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'server/**'
+      - '.github/workflows/backend.yml'
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          cache-dependency-path: './server/yarn.lock'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Type check
+        run: yarn tsc --noEmit
+
+      - name: Trunk Check
+        uses: trunk-io/trunk-action@v1
+        with:
+          post-annotations: true
+
+      - name: Test
+        run: yarn test
+
+      - name: Build
+        run: yarn compile

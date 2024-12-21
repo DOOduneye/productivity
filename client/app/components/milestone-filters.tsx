@@ -26,7 +26,7 @@ export default function MilestoneFiltersComponent() {
           variant={status === selectedStatus ? 'default' : 'outline'}
           onClick={() => setSelectedStatus(status)}
         >
-          {statusMap[status]}
+          {statusMap[status as keyof typeof statusMap]}
         </Button>
       ))}
     </div>

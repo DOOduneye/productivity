@@ -1,5 +1,6 @@
 import { useLoaderData } from '@remix-run/react';
 import { PlusCircle } from 'lucide-react';
+
 import MilestoneFiltersComponent from '~/components/milestone-filters';
 import MilestonesComponent from '~/components/milestones';
 import PriorityComponent from '~/components/priority';
