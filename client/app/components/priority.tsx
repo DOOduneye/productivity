@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-import { Priority, priorityEnum } from '../../../server/src/db/schema';
+import { Priority, priorityEnum } from '~/types';
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 export default function PriorityComponent() {
@@ -18,7 +19,7 @@ export default function PriorityComponent() {
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="all">All</SelectItem>
-        {priorityEnum.enumValues.map((priority) => (
+        {priorityEnum.options.map((priority: Priority) => (
           <SelectItem key={priority} value={priority}>
             {priority.charAt(0).toUpperCase() + priority.slice(1)}
           </SelectItem>

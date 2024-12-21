@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-import { Status, statusEnum } from '../../../server/src/db/schema';
+import { Status, statusEnum } from '~/types';
+
 import { Button } from './ui/button';
 
 export default function MilestoneFiltersComponent() {
@@ -8,7 +9,7 @@ export default function MilestoneFiltersComponent() {
 
   const statusMap = {
     todo: 'To Do',
-    in_progress: 'In Progress',
+    active: 'In Progress',
     completed: 'Completed'
   };
 
@@ -20,7 +21,7 @@ export default function MilestoneFiltersComponent() {
       >
         All
       </Button>
-      {statusEnum.enumValues.map((status) => (
+      {statusEnum.options.map((status: Status) => (
         <Button
           key={status}
           variant={status === selectedStatus ? 'default' : 'outline'}

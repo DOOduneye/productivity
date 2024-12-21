@@ -1,4 +1,5 @@
-import { Milestone } from '../../../server/src/db/schema';
+import { Milestone } from '~/types';
+
 import MilestoneCard from './milestone-card';
 
 export default function MilestonesComponent({ milestones }: { milestones: Milestone[] }) {

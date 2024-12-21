@@ -2,7 +2,8 @@ import { useState } from 'react';
 
 import { ChevronDownIcon, ChevronUpIcon, CirclePlay, MoreVerticalIcon, Pen } from 'lucide-react';
 
-import { Milestone } from '../../../server/src/db/schema';
+import { Milestone, Priority } from '~/types';
+
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
@@ -16,7 +17,7 @@ import {
 } from './ui/dropdown-menu';
 import { Progress } from './ui/progress';
 
-const priorityColors = {
+const priorityColors: Record<Priority, string> = {
   low: 'bg-green-500',
   medium: 'bg-yellow-500',
   high: 'bg-red-500'

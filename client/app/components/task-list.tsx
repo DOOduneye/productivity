@@ -1,4 +1,4 @@
-import { Task } from '../../../server/src/db/schema';
+import { Task } from '~/types';
 
 export default function TaskList({ tasks }: { tasks: Task[] }) {
   return (
