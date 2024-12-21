@@ -63,7 +63,7 @@ export default function MilestoneCard({ milestone }: { milestone: Milestone }) {
                 <DropdownMenuItem>High</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button variant="ghost" size="icon" onClick={() => setExpanded(!expanded)}>
+            <Button variant="ghost" size="icon" onClick={() => setExpanded(!expanded)} />
             <Button variant="ghost" size="icon" onClick={() => setExpanded(!expanded)}>
               {expanded ? (
                 <ChevronUpIcon className="h-4 w-4" />
