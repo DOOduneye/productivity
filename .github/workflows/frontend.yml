@@ -35,13 +35,12 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Type check
-        run: yarn typecheck
+        run: yarn typecheck --noEmit
 
-      - name: Lint
-        run: yarn lint
-
-      - name: Format check
-        run: yarn format
+      - name: Trunk Check
+        uses: trunk-io/trunk-action@v1
+        with:
+          post-annotations: true
 
       - name: Test
         run: yarn test

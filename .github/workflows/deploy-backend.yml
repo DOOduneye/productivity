@@ -50,13 +50,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Digital Ocean
-        uses: appleboy/ssh-action@v1.2.0
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DO_HOST }}
           username: ${{ secrets.DO_USER }}
           key: ${{ secrets.DO_SSH_KEY }}
           passphrase: ${{ secrets.DO_SSH_PASSPHRASE }}
           script: |
+            cd productivity/
             docker pull davidoduneye/productivity:latest
             docker-compose down
             docker-compose up -d
