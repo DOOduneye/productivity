@@ -9,7 +9,7 @@
     "build": "tsc",
     "dev": "tsx watch --env-file=.env src/app.ts",
     "start": "yarn run build && node --env-file=.env build/src/app.js",
-    "test": "vitest run",
+    "test": "vitest run /test",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "lint": "trunk check ./",
@@ -25,6 +25,9 @@
     "studio": "yarn run drizzle-kit studio"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.2.4",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.17.0",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.2",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
@@ -35,6 +38,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.28.1",
+    "globals": "^15.14.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8",

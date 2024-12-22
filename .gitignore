@@ -54,3 +54,4 @@ yarn-error.log*
 .trunk/*
 !.trunk/trunk.yaml
 !.trunk/configs
+!.trunk/setup-ci/

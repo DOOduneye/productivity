@@ -3,13 +3,15 @@ name: Weekly Full Trunk Check
 on:
   schedule:
     # Runs at 00:00 on Sunday
-    - cron: '0 0 * * 0'
-  workflow_dispatch:
+    - cron: 0 0 * * 0
+  workflow_dispatch: {}
 
 permissions:
   actions: read
-  contents: read
+  contents: write
+  pull-requests: write
   security-events: write
+  checks: write
 
 jobs:
   full-check:
@@ -22,3 +24,6 @@ jobs:
         with:
           check-mode: all
           post-annotations: true
+
+      - name: Trunk Upgrade
+        uses: trunk-io/trunk-action/upgrade@v1

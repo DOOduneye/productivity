@@ -2,19 +2,19 @@ name: Deploy Backend
 
 on:
   push:
-    branches: ['main']
+    branches: [main]
     paths:
-      - 'server/**'
+      - server/**
       - '**/Dockerfile'
       - '**/docker-compose.yml'
-      - '.dockerignore'
+      - .dockerignore
   pull_request:
-    branches: ['main']
+    branches: [main]
     paths:
-      - 'server/**'
+      - server/**
       - '**/Dockerfile'
       - '**/docker-compose.yml'
-      - '.dockerignore'
+      - .dockerignore
   workflow_dispatch:
 
 permissions:

@@ -1,0 +1,10 @@
+name: Trunk Code Quality setup
+description: Set up dependencies for Trunk Code Quality
+runs:
+  using: composite
+  steps:
+    - name: Install eslint dependencies
+      shell: bash
+      run: |
+        cd ./server && yarn install --frozen-lockfile
+        cd ../client && yarn install --frozen-lockfile
