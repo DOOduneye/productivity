@@ -58,6 +58,24 @@ jobs:
           passphrase: ${{ secrets.DO_SSH_PASSPHRASE }}
           script: |
             cd productivity/
+            # Remove all unused containers, networks, images
+            docker system prune -af
+            # Pull latest image
             docker pull davidoduneye/productivity:latest
             docker-compose down
-            docker-compose up -d
+            docker-compose up -d --remove-orphans
+
+  cleanup:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clean up old images
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USER }}
+          key: ${{ secrets.DO_SSH_KEY }}
+          passphrase: ${{ secrets.DO_SSH_PASSPHRASE }}
+          script: |
+            # Keep only images used by running containers and remove everything else
+            docker image prune -af --filter "until=24h"
