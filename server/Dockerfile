@@ -18,21 +18,17 @@ WORKDIR /server
 # Switch to root for installation and setup
 USER root
 
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.yarn to speed up subsequent builds.
-# Leverage a bind mounts to package.json and yarn.lock to avoid having to copy them into
-# into this layer.
-# RUN --mount=type=bind,source=package.json,target=package.json \
-#     --mount=type=bind,source=yarn.lock,target=yarn.lock \
-#     --mount=type=cache,target=/root/.yarn \
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+
+# Download dependencies as a separate step to take advantage of Docker's caching.
+RUN yarn install --frozen-lockfile && yarn cache clean
 
 # Copy the rest of the source files into the image.
 COPY . .
 
-# Create build directory and set permissions
-RUN mkdir -p /server/build && \
+# Run the build before setting permissions
+RUN yarn build && \
+    mkdir -p /server/build && \
     chown -R node:node /server/build && \
     chmod -R 755 /server/build
 
