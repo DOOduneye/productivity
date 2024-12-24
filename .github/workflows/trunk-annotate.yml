@@ -2,7 +2,7 @@ name: Annotate PR with trunk issues
 
 on:
   workflow_run:
-    workflows: ['Backend CI', 'Frontend CI', 'Weekly Full Trunk Check']
+    workflows: [Backend CI, Frontend CI, Weekly Full Trunk Check]
     types: [completed]
 
 permissions:

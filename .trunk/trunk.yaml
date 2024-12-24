@@ -12,17 +12,24 @@ plugins:
 # Many linters and tools depend on runtimes - configure them here. (https://docs.trunk.io/runtimes)
 runtimes:
   enabled:
+    - go@1.21.0
     - node@18.20.5
     - python@3.10.8
 # This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
 lint:
   enabled:
-    - checkov@3.2.340
+    - actionlint@1.7.4
+    - hadolint@2.12.1-beta
+    - shellcheck@0.10.0
+    - shfmt@3.6.0
+    - yamllint@1.35.1
+    - eslint@8.38.0
+    - checkov@3.2.343
     - git-diff-check
     - markdownlint@0.43.0
-    - osv-scanner@1.9.1
+    - osv-scanner@1.9.2
     - oxipng@9.1.3
-    - trufflehog@3.87.0
+    - trufflehog@3.87.2
     - prettier@3.4.2:
         packages:
           - '@trivago/prettier-plugin-sort-imports@5.2.0'
@@ -30,14 +37,14 @@ lint:
     - linters: [ALL]
       paths:
         - '**/node_modules/**'
-        - 'build/**'
-        - 'dist/**'
-        - '.cache/**'
+        - build/**
+        - dist/**
+        - .cache/**
 
 actions:
   disabled:
     - trunk-announce
     - trunk-check-pre-push
-    - trunk-fmt-pre-commit
   enabled:
+    - trunk-fmt-pre-commit
     - trunk-upgrade-available

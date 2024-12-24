@@ -22,5 +22,8 @@ export default defineConfig({
       }
     }),
     tsconfigPaths()
-  ]
+  ],
+  test: {
+    reporters: ['default', 'hanging-process']
+  }
 });

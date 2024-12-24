@@ -4,18 +4,19 @@ on:
   push:
     branches: [main]
     paths:
-      - 'server/**'
-      - '.github/workflows/backend.yml'
+      - server/**
+      - .github/workflows/backend.yml
   pull_request:
     branches: [main]
     paths:
-      - 'server/**'
-      - '.github/workflows/backend.yml'
+      - server/**
+      - .github/workflows/backend.yml
 
-permissions:
-  actions: read
-  contents: read
-  security-events: write
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions: read-all
 
 jobs:
   backend:
@@ -23,13 +24,19 @@ jobs:
     defaults:
       run:
         working-directory: ./server
+    permissions:
+      checks: write
+
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'yarn'
-          cache-dependency-path: './server/yarn.lock'
+          cache: yarn
+          cache-dependency-path: ./server/yarn.lock
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -37,10 +44,10 @@ jobs:
       - name: Type check
         run: yarn tsc --noEmit
 
-      - name: Trunk Check
+      - name: Lint and Format
         uses: trunk-io/trunk-action@v1
         with:
-          post-annotations: true
+          arguments: --filter=eslint,prettier ./server
 
       - name: Test
         run: yarn test
