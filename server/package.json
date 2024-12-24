@@ -6,7 +6,7 @@
   "type": "module",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "tsc",
+    "build": "yarn tsc",
     "dev": "tsx watch --env-file=.env src/app.ts",
     "start": "yarn run build && node --env-file=.env build/src/app.js",
     "test": "vitest run /test",
