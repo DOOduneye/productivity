@@ -58,12 +58,10 @@ jobs:
           passphrase: ${{ secrets.DO_SSH_PASSPHRASE }}
           script: |
             cd productivity/
-            # Remove all unused containers, networks, images
             docker system prune -af
-            # Pull latest image
             docker pull davidoduneye/productivity:latest
-            docker-compose down
-            docker-compose up -d --remove-orphans
+            docker compose -f docker-compose.prod.yml down
+            docker compose -f docker-compose.prod.yml up -d --remove-orphans
 
   cleanup:
     needs: deploy

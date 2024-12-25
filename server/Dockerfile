@@ -8,40 +8,50 @@
 
 ARG NODE_VERSION=22.12.0
 
-FROM node:${NODE_VERSION}-alpine
-
-# Use production node environment by default.
-ENV NODE_ENV=production
+# Build stage
+FROM node:${NODE_VERSION}-alpine AS build
 
 WORKDIR /server
 
-# Switch to root for installation and setup
-USER root
+# Download dependencies for build
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
+# Copy source files and config files
+COPY tsconfig.json ./
+COPY src ./src
+COPY test ./test
+COPY drizzle.config.ts ./
+
+# Build the application
+RUN yarn build
+
+# Production stage
+FROM node:${NODE_VERSION}-alpine AS production
+
+ENV NODE_ENV=production
+WORKDIR /server
+
+# Copy package files
 COPY package.json yarn.lock ./
 
-# Download dependencies as a separate step to take advantage of Docker's caching.
-RUN yarn install --frozen-lockfile && yarn cache clean
+# Install only production dependencies
+RUN yarn install --frozen-lockfile --production && \
+    yarn cache clean
 
-# Copy the rest of the source files into the image.
-COPY . .
+# Copy built application from build stage
+COPY --from=build /server/build ./build
 
-# Run the build before setting permissions
-RUN yarn build && \
-    mkdir -p /server/build && \
-    chown -R node:node /server/build && \
-    chmod -R 755 /server/build
+# Create a non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001 && \
+    chown -R nodejs:nodejs /server
 
-# Run the application as a non-root user.
-USER node
+USER nodejs
 
-# Expose the port that the application listens on.
 EXPOSE 8000
 
-# Add healthcheck
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD wget --no-verbose --tries=1 --spider http://localhost:8000/health || exit 1
 
-# Run the application.
-# CMD ["yarn", "run", "start"]
-CMD ["sh", "-c", "yarn run start"]
+CMD ["node", "--env-file=.env", "build/src/app.js"]

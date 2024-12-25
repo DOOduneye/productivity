@@ -11,10 +11,10 @@ services:
   server:
     build:
       context: ./server
+      target: build
       dockerfile: Dockerfile
-    image: davidoduneye/productivity:latest
     environment:
-      NODE_ENV: production
+      NODE_ENV: development
     env_file:
       - ./server/.env
     ports:
@@ -22,11 +22,7 @@ services:
     volumes:
       - ./server:/server
       - /server/node_modules
-    deploy:
-      restart_policy:
-        condition: on-failure
-    labels:
-      - com.docker.compose.cleanup=true
+    command: yarn run dev
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
