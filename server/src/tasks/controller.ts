@@ -1,13 +1,14 @@
 import type { Request, Response } from 'express';
 
+import { Pagination } from '../utils/pagination.js';
 import type { ITaskService } from './service.js';
 
 export class TaskController {
   constructor(private readonly taskService: ITaskService) {}
 
-  getTasks = async (_: Request, res: Response) => {
+  getTasks = async (req: Request, res: Response) => {
     try {
-      const tasks = await this.taskService.getTasks();
+      const tasks = await this.taskService.getTasks(Pagination(req));
       res.status(200).json(tasks);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch tasks' });
