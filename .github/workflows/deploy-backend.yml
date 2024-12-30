@@ -23,6 +23,7 @@ permissions:
 
 jobs:
   build-and-push:
+    if: false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

@@ -17,11 +17,8 @@ WORKDIR /server
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
-# Copy source files and config files
-COPY tsconfig.json ./
-COPY src ./src
-COPY test ./test
-COPY drizzle.config.ts ./
+# Copy the rest of the source files into the image
+COPY . .
 
 # Build the application
 RUN yarn build
@@ -29,7 +26,9 @@ RUN yarn build
 # Production stage
 FROM node:${NODE_VERSION}-alpine AS production
 
+# Use production node environment
 ENV NODE_ENV=production
+
 WORKDIR /server
 
 # Copy package files
@@ -49,9 +48,12 @@ RUN addgroup -g 1001 -S nodejs && \
 
 USER nodejs
 
+# Expose the port that the application listens on
 EXPOSE 8000
 
+# Add healthcheck
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD wget --no-verbose --tries=1 --spider http://localhost:8000/health || exit 1
 
+# Run the application
 CMD ["node", "--env-file=.env", "build/src/app.js"]
