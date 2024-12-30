@@ -10,12 +10,14 @@ import {
   milestones,
   tasks
 } from '../db/schema.js';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../utils/const.js';
+import type { Pagination } from '../utils/pagination.js';
 import type { MilestoneFilters } from './controller.js';
 
 export interface IMilestoneService {
-  getMilestones(filters?: MilestoneFilters): Promise<Milestone[]>;
+  getMilestones(filters?: MilestoneFilters, pagination?: Pagination): Promise<Milestone[]>;
   getMilestone(id: number): Promise<Milestone | undefined>;
-  getMilestoneTasks(id: number): Promise<Task[]>;
+  getMilestoneTasks(id: number, pagination?: Pagination): Promise<Task[]>;
   createMilestone(milestone: Milestone): Promise<Milestone[]>;
   createMilestoneTask(milestoneId: number, task: Task): Promise<Task[]>;
   updateMilestone(id: number, milestone: Milestone): Promise<Milestone[]>;
@@ -25,7 +27,8 @@ export interface IMilestoneService {
 export class MilestoneService implements IMilestoneService {
   constructor(private readonly db: PostgresJsDatabase<Record<string, never>>) {}
 
-  async getMilestones(filters?: MilestoneFilters) {
+  async getMilestones(filters?: MilestoneFilters, pagination?: Pagination) {
+    console.log(pagination);
     return await this.db
       .select()
       .from(milestones)
@@ -34,7 +37,9 @@ export class MilestoneService implements IMilestoneService {
           filters?.status ? eq(milestones.status, filters.status as Status) : undefined,
           filters?.priority ? eq(milestones.priority, filters.priority as Priority) : undefined
         )
-      );
+      )
+      .limit(pagination?.pageSize ?? DEFAULT_PAGE_SIZE)
+      .offset((pagination?.page ?? DEFAULT_PAGE - 1) * (pagination?.pageSize ?? DEFAULT_PAGE_SIZE));
   }
 
   async getMilestone(id: number) {
@@ -46,8 +51,13 @@ export class MilestoneService implements IMilestoneService {
       .then(([milestone]) => milestone);
   }
 
-  async getMilestoneTasks(id: number) {
-    return await this.db.select().from(tasks).where(eq(tasks.milestone_id, id));
+  async getMilestoneTasks(id: number, pagination?: Pagination) {
+    return await this.db
+      .select()
+      .from(tasks)
+      .where(eq(tasks.milestone_id, id))
+      .limit(pagination?.pageSize ?? DEFAULT_PAGE_SIZE)
+      .offset((pagination?.page ?? DEFAULT_PAGE - 1) * (pagination?.pageSize ?? DEFAULT_PAGE_SIZE));
   }
 
   async createMilestone(milestone: Milestone) {

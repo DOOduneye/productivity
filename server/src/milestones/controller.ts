@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
 
+import { Pagination } from '../utils/pagination.js';
 import type { IMilestoneService } from './service.js';
 
 const MilestoneFiltersSchema = z.object({
@@ -25,9 +26,10 @@ export class MilestoneController {
           error: 'Invalid filters',
           details: result.error.issues
         });
+        return;
       }
 
-      const milestones = await this.milestoneService.getMilestones(result.data);
+      const milestones = await this.milestoneService.getMilestones(result.data, Pagination(req));
       res.status(200).json(milestones);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch milestones' });
@@ -47,7 +49,7 @@ export class MilestoneController {
   getMilestoneTasks = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const tasks = await this.milestoneService.getMilestoneTasks(Number(id));
+      const tasks = await this.milestoneService.getMilestoneTasks(Number(id), Pagination(req));
       res.status(200).json(tasks);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch milestone tasks' });

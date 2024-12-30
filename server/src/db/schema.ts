@@ -9,7 +9,11 @@ import {
   varchar
 } from 'drizzle-orm/pg-core';
 
-import { timestamps } from './schema.helpers.js';
+export const timestamps = {
+  updated_at: timestamp(),
+  created_at: timestamp().defaultNow().notNull(),
+  deleted_at: timestamp()
+};
 
 // TODO: Add more status levels
 export const statusEnum = pgEnum('status', [

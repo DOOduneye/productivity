@@ -1,37 +1,24 @@
-// import {sql} from 'drizzle-orm';
-// import type {PgSelect} from 'drizzle-orm/pg-core';
+import type { Request } from 'express';
+import { z } from 'zod';
 
-// import {Pagination, QueryStringPagination} from '../types';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from './const.js';
 
-// export async function paginateQuery<T extends PgSelect>({
-//   query,
-//   QueryStringPagination,
-// }: {
-//   query: T;
-//   QueryStringPagination: QueryStringPagination;
-// }): Promise<{data: T[]; pagination: Pagination}> {
-//   const subQuery = query.as('sub');
-//   const totalRecordsQuery = db
-//     .select({total: sql<number>`count(*)`})
-//     .from(subQuery);
+export const PaginationSchema = z.object({
+  page: z.coerce.number().min(1).default(DEFAULT_PAGE).optional(),
+  pageSize: z.coerce.number().min(1).max(100).default(DEFAULT_PAGE_SIZE).optional()
+});
 
-//   const totalRecordsResult = await totalRecordsQuery.execute();
-//   const totalRecords = Number(totalRecordsResult[0].total);
-//   const totalPages = Math.ceil(totalRecords / QueryStringPagination.limit);
+export const Pagination = (req: Request) => {
+  const pagination = PaginationSchema.safeParse({
+    page: req.query.page,
+    pageSize: req.query.pageSize
+  });
 
-//   query
-//     .limit(QueryStringPagination.limit)
-//     .offset((QueryStringPagination.page - 1) * QueryStringPagination.limit);
+  if (!pagination.success) {
+    throw new Error('Invalid pagination');
+  }
 
-//   const results = (await query.execute()) as T[];
+  return pagination.data;
+};
 
-//   return {
-//     data: results,
-//     pagination: {
-//       totalRecords: totalRecords,
-//       totalPages: totalPages,
-//       currentPage: QueryStringPagination.page,
-//       limit: QueryStringPagination.limit,
-//     },
-//   };
-// }
+export type Pagination = z.infer<typeof PaginationSchema>;
