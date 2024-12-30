@@ -8,44 +8,52 @@
 
 ARG NODE_VERSION=22.12.0
 
-FROM node:${NODE_VERSION}-alpine
+# Build stage
+FROM node:${NODE_VERSION}-alpine AS build
 
-# Use production node environment by default.
+WORKDIR /server
+
+# Download dependencies for build
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
+# Copy the rest of the source files into the image
+COPY . .
+
+# Build the application
+RUN yarn build
+
+# Production stage
+FROM node:${NODE_VERSION}-alpine AS production
+
+# Use production node environment
 ENV NODE_ENV=production
 
 WORKDIR /server
 
-# Switch to root for installation and setup
-USER root
-
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.yarn to speed up subsequent builds.
-# Leverage a bind mounts to package.json and yarn.lock to avoid having to copy them into
-# into this layer.
-# RUN --mount=type=bind,source=package.json,target=package.json \
-#     --mount=type=bind,source=yarn.lock,target=yarn.lock \
-#     --mount=type=cache,target=/root/.yarn \
+# Copy package files
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
 
-# Copy the rest of the source files into the image.
-COPY . .
+# Install only production dependencies
+RUN yarn install --frozen-lockfile --production && \
+    yarn cache clean
 
-# Create build directory and set permissions
-RUN mkdir -p /server/build && \
-    chown -R node:node /server/build && \
-    chmod -R 755 /server/build
+# Copy built application from build stage
+COPY --from=build /server/build ./build
 
-# Run the application as a non-root user.
-USER node
+# Create a non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001 && \
+    chown -R nodejs:nodejs /server
 
-# Expose the port that the application listens on.
+USER nodejs
+
+# Expose the port that the application listens on
 EXPOSE 8000
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD wget --no-verbose --tries=1 --spider http://localhost:8000/health || exit 1
 
-# Run the application.
-# CMD ["yarn", "run", "start"]
-CMD ["sh", "-c", "yarn run start"]
+# Run the application
+CMD ["node", "--env-file=.env", "build/src/app.js"]

@@ -1,0 +1,14 @@
+services:
+  server:
+    image: davidoduneye/productivity:latest
+    build:
+      context: ./server
+      target: build
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+    env_file:
+      - ./server/.env
+    ports:
+      - 8000:8000
+    restart: unless-stopped
