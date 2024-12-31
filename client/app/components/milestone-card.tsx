@@ -2,8 +2,6 @@ import { useState } from 'react';
 
 import { ChevronDownIcon, ChevronUpIcon, CirclePlay, MoreVerticalIcon, Pen } from 'lucide-react';
 
-import { Milestone, Priority } from '~/types';
-
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
@@ -16,6 +14,8 @@ import {
   DropdownMenuTrigger
 } from './ui/dropdown-menu';
 import { Progress } from './ui/progress';
+
+import { Milestone, Priority } from '~/lib/types';
 
 const priorityColors: Record<Priority, string> = {
   low: 'bg-green-500',
@@ -78,11 +78,7 @@ export default function MilestoneCard({ milestone }: { milestone: Milestone }) {
             <CirclePlay className="h-4 w-4" />
             <p className="text-xs font-semibold">
               {milestone.start_date
-                ? new Date(milestone.start_date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })
+                ? new Date(milestone.start_date).toISOString().split('T')[0]
                 : 'No date set'}
             </p>
           </CardDescription>

@@ -1,4 +1,4 @@
-import { Task } from '~/types';
+import { Task } from '~/lib/types';
 
 export default function TaskList({ tasks }: { tasks: Task[] }) {
   return (

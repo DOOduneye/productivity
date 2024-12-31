@@ -1,18 +1,27 @@
-import { useState } from 'react';
-
-import { Priority, priorityEnum } from '~/types';
+import { useSearchParams } from '@remix-run/react';
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
+import { Priority, priorityEnum } from '~/lib/types';
+
 export default function PriorityComponent() {
-  const [selectedPriority, setSelectedPriority] = useState<Priority | 'all' | null>('all');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedPriority = searchParams.get('priority') as Priority | null;
+
+  const handlePriorityChange = (value: string) => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (value === 'all') {
+      newSearchParams.delete('priority');
+    } else {
+      newSearchParams.set('priority', value);
+    }
+    setSearchParams(newSearchParams);
+  };
 
   return (
     <Select
-      value={selectedPriority ?? undefined}
-      onValueChange={(value: Priority) =>
-        setSelectedPriority(value === selectedPriority ? null : value)
-      }
+      value={selectedPriority ?? 'all'}
+      onValueChange={handlePriorityChange}
     >
       <SelectTrigger className="w-32">
         <SelectValue placeholder="Priority" />
