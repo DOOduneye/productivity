@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { ChevronDownIcon, ChevronUpIcon, CirclePlay, MoreVerticalIcon, Pen } from 'lucide-react';
+import { ChevronDownIcon, ChevronUpIcon, CircleCheck, Circle, CirclePlay, MoreVerticalIcon, Pen, CircleAlert } from 'lucide-react';
 
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
@@ -15,7 +15,8 @@ import {
 } from './ui/dropdown-menu';
 import { Progress } from './ui/progress';
 
-import { Milestone, Priority } from '~/lib/types';
+import { Milestone, Priority, Task } from '~/lib/types';
+import { Checkbox } from './ui/checkbox';
 
 const priorityColors: Record<Priority, string> = {
   low: 'bg-green-500',
@@ -23,123 +24,150 @@ const priorityColors: Record<Priority, string> = {
   high: 'bg-red-500'
 };
 
-export default function MilestoneCard({ milestone }: { milestone: Milestone }) {
-  const [expanded, setExpanded] = useState(false);
+export default function MilestoneCard({ milestone, tasks }: { milestone: Milestone, tasks: Task[] }) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
     <Card key={milestone.id} className="mb-4 rounded-md">
       <CardHeader className="flex flex-col gap-2">
         <div className="flex flex-row items-center justify-between">
           <CardTitle>{milestone.title}</CardTitle>
-          <div className="flex flex-row items-center gap-1">
-            <div className="flex flex-row items-center gap-2">
-              <Badge variant={'outline'} className="text-xs rounded-lg">
-                {milestone.status}
-              </Badge>
-              <div
-                className={`h-3 w-3 rounded-full ${priorityColors[milestone.priority]}`}
-                title={`Priority: ${milestone.priority}`}
-              />
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <MoreVerticalIcon className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Task Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Edit Task</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Change Status</DropdownMenuLabel>
-                <DropdownMenuItem>To Do</DropdownMenuItem>
-                <DropdownMenuItem>In Progress</DropdownMenuItem>
-                <DropdownMenuItem>Completed</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Change Priority</DropdownMenuLabel>
-                <DropdownMenuItem>Low</DropdownMenuItem>
-                <DropdownMenuItem>Medium</DropdownMenuItem>
-                <DropdownMenuItem>High</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button variant="ghost" size="icon" onClick={() => setExpanded(!expanded)} />
-            <Button variant="ghost" size="icon" onClick={() => setExpanded(!expanded)}>
-              {expanded ? (
-                <ChevronUpIcon className="h-4 w-4" />
-              ) : (
-                <ChevronDownIcon className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
+          <MilestoneActions milestone={milestone} isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
         </div>
         <div className="flex flex-col">
-          <CardDescription className="flex flex-row items-center gap-2 text-muted-foreground text-green-600">
-            <CirclePlay className="h-4 w-4" />
+          <CardDescription className="flex flex-row items-center gap-2 text-muted-foreground">
+            <MilestoneTimeline milestone={milestone} />
             <p className="text-xs font-semibold">
               {milestone.start_date
-                ? new Date(milestone.start_date).toISOString().split('T')[0]
+                ? new Date(milestone.start_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
                 : 'No date set'}
             </p>
           </CardDescription>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
-        <div className="flex flex-col gap-2">
-          <Progress value={33} />
-          <p className="text-xs text-muted-foreground">
-            Progress: {2} of {4} subtasks completed
-          </p>
-        </div>
-
-        {expanded && (
-          <>
-            <div className="flex flex-col gap-2">
-              <p className="text-sm text-muted-foreground">{milestone.description}</p>
-              <p className="text-sm text-muted-foreground">{milestone.description}</p>
-            </div>
-
-            {/* <div className="space-y-2">
-                <h4 className="font-medium">Subtasks</h4>
-                  <TaskList tasks={milestone.id} />
-            </div> */}
-
-            {/* <div className="space-y-2">
-                <h4 className="font-medium">Subtasks</h4>
-                {localTask.subtasks.map((subtask, index) => (
-                <div key={index} className="flex items-center space-x-2">
-                    <Checkbox
-                    id={`subtask-${index}`}
-                    checked={subtask.completed}
-                    onCheckedChange={() => handleSubtaskToggle(index)}
-                    />
-                    <label htmlFor={`subtask-${index}`} className="text-sm">{subtask.title}</label>
-                </div>
-                ))}
-            </div>
-            {task.tags && task.tags.length > 0 && (
-                <div className="flex items-center space-x-2">
-                <TagIcon className="h-4 w-4 text-muted-foreground" />
-                {task.tags.map((tag, index) => (
-                    <Badge key={index} variant="secondary">{tag}</Badge>
-                ))}
-                </div>
-            )}
-            {task.reminder && (
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                <AlertCircleIcon className="h-4 w-4" />
-                <span>Reminder: {task.reminder}</span>
-                </div>
-            )}
-            </div> */}
-          </>
-        )}
+        <MilestonePorgressBar tasks={tasks || []} />
 
         <Button variant="outline" className="w-fit">
           <Pen className="h-4 w-4" />
           Edit
         </Button>
+
+        {isCollapsed ? (
+          <div className="mt-4">
+            <h3 className="text-sm font-semibold mb-2">Subtasks</h3>
+            <div className="space-y-2">
+              {tasks.map((task) => (
+                <div key={task.id} className="flex items-center gap-2">
+                  <Checkbox
+                    checked={task.completed}
+                    className="h-4 w-4 rounded border-gray-300"
+                  />
+                  <span className={task.completed ? 'line-through text-muted-foreground text-sm' : 'text-muted-foreground text-sm'}>
+                    {task.title}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   );
 }
+
+const MilestoneTimeline = ({ milestone }: { milestone: Milestone }) => {
+  {/* Options
+    If the milestone hasn't started yet
+      Starting on {milestone.start_date}
+    If the milestone has started but its not completed yet
+      Started on {milestone.start_date}
+    If the milestone has started but its not completed yet and its overdue by its end_date
+      Started on {milestone.start_date}
+      Overdue by {milestone.end_date < now}
+    If the milestone was started and now its complete
+      Completed on {milestone.start_date}
+  */}
+
+  const isStarted = milestone.start_date ? new Date(milestone.start_date) >= new Date() : null;
+
+  console.log(milestone.start_date);
+  console.log(isStarted);
+
+  return (
+    <>
+      {/* <CircleCheck className="h-4 w-4 text-green-500 font-semibold" />
+      <CircleAlert className="h-4 w-4 text-green-500 font-semibold" /> */}
+      {isStarted ? <CirclePlay className="h-4 w-4 text-green-500 font-semibold" /> : null}
+    </>
+  );
+}
+
+const MilestoneActions = ({ milestone, isCollapsed, setIsCollapsed }: { milestone: Milestone, isCollapsed: boolean, setIsCollapsed: (isCollapsed: boolean) => void }) => {
+
+  return (
+    <div className="flex flex-row items-center gap-1">
+      <div className="flex flex-row items-center gap-1">
+        <Badge variant={'outline'} className="text-xs rounded-lg">
+          {milestone.status}
+        </Badge>
+        <div
+          className={`h-3 w-3 rounded-full ${priorityColors[milestone.priority]}`}
+          title={`Priority: ${milestone.priority}`}
+        />
+      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon">
+            <MoreVerticalIcon className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+      </DropdownMenu>
+      <Button variant="ghost" size="icon" onClick={() => setIsCollapsed(!isCollapsed)}>
+        {isCollapsed ? (
+          <ChevronUpIcon className="h-4 w-4" />
+        ) : (
+          <ChevronDownIcon className="h-4 w-4" />
+        )}
+      </Button>
+    </div>
+  );
+};
+
+const MilestonePorgressBar = ({ tasks }: { tasks: Task[] }) => {
+  const completedTasks = tasks?.filter(task => task.completed).length || 0;
+  const totalTasks = tasks?.length || 0;
+  const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+
+  return (
+    <div className="flex flex-col gap-2">
+      <Progress value={progress} />
+      <p className="text-xs text-muted-foreground">
+        Progress: {completedTasks} of {totalTasks} subtasks completed
+      </p>
+    </div>
+  );
+};
+
+{/* <DropdownMenu>
+<DropdownMenuTrigger asChild>
+  <Button variant="ghost" size="icon">
+    <MoreVerticalIcon className="h-4 w-4" />
+  </Button>
+</DropdownMenuTrigger>
+<DropdownMenuContent align="end">
+  <DropdownMenuLabel>Task Actions</DropdownMenuLabel>
+  <DropdownMenuSeparator />
+  <DropdownMenuItem>Edit Task</DropdownMenuItem>
+  <DropdownMenuSeparator />
+  <DropdownMenuLabel>Change Status</DropdownMenuLabel>
+  <DropdownMenuItem>To Do</DropdownMenuItem>
+  <DropdownMenuItem>In Progress</DropdownMenuItem>
+  <DropdownMenuItem>Completed</DropdownMenuItem>
+  <DropdownMenuSeparator />
+  <DropdownMenuLabel>Change Priority</DropdownMenuLabel>
+  <DropdownMenuItem>Low</DropdownMenuItem>
+  <DropdownMenuItem>Medium</DropdownMenuItem>
+  <DropdownMenuItem>High</DropdownMenuItem>
+</DropdownMenuContent>
+</DropdownMenu> */}
