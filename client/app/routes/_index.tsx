@@ -1,43 +1,49 @@
-import { useLoaderData } from '@remix-run/react';
-import { PlusCircle } from 'lucide-react';
+// import { LoaderFunctionArgs } from '@remix-run/node';
+// import { useLoaderData } from '@remix-run/react';
+// import { PlusCircle } from 'lucide-react';
 
-import MilestoneFiltersComponent from '~/components/milestone-filters';
-import MilestonesComponent from '~/components/milestones';
-import PriorityComponent from '~/components/priority';
-import { Button } from '~/components/ui/button';
+// import MilestoneFiltersComponent from '~/components/milestone-filters';
+// import MilestonesComponent from '~/components/milestones';
+// import PriorityComponent from '~/components/priority';
+// import { Button } from '~/components/ui/button';
 
-export async function loader() {
-  try {
-    const response = await fetch(`http://localhost:8000/api/v1/milestones`);
-    const milestones = await response.json();
+// export async function loader({ request }: LoaderFunctionArgs) {
+//   const url = new URL(request.url);
+//   const status = url.searchParams.get('status');
 
-    return Response.json({ milestones });
-  } catch (error) {
-    console.error('Failed to fetch milestones:', error);
-    return Response.json({
-      milestones: [],
-      error: 'Failed to load milestones'
-    });
-  }
-}
+//   try {
+//     const response = await fetch(
+//       `http://localhost:8000/api/v1/milestones${status ? `?status=${status}` : ''}`
+//     );
+//     const milestones = await response.json();
+
+//     return Response.json({ milestones });
+//   } catch (error) {
+//     console.error('Failed to fetch milestones:', error);
+//     return Response.json({
+//       milestones: [],
+//       error: 'Failed to load milestones'
+//     });
+//   }
+// }
 
 export default function Index() {
-  const { milestones } = useLoaderData<typeof loader>();
+  // const { milestones } = useLoaderData<typeof loader>();
 
   return (
     <div className="flex h-screen p-10 flex-col gap-4">
       <h1 className="text-2xl font-bold">Productivity</h1>
       <div className="flex flex-row gap-2 justify-between">
-        <MilestoneFiltersComponent />
+        {/* <MilestoneFiltersComponent /> */}
         <div className="flex flex-row gap-2">
-          <PriorityComponent />
-          <Button>
+          {/* <PriorityComponent /> */}
+          {/* <Button>
             {' '}
             <PlusCircle className="h-4 w-4" /> New Milestone
-          </Button>
+          </Button> */}
         </div>
       </div>
-      <MilestonesComponent milestones={milestones} />
+      {/* <MilestonesComponent milestones={milestones} /> */}
     </div>
   );
 }
