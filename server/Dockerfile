@@ -6,10 +6,14 @@
 
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
-ARG NODE_VERSION=22.12.0
+ARG NODE_VERSION=22.23.3
 
 # Build stage
 FROM node:${NODE_VERSION}-alpine AS build
+
+# Update CA certificates for the eMudhra intermediate CA compromise:
+# Alpine's patched ca-certificates (20261020-r0 and later) drops trust in them
+RUN apk add --no-cache --upgrade ca-certificates
 
 WORKDIR /server
 
@@ -25,6 +29,10 @@ RUN yarn build
 
 # Production stage
 FROM node:${NODE_VERSION}-alpine AS production
+
+# Update CA certificates for the eMudhra intermediate CA compromise:
+# Alpine's patched ca-certificates (20261020-r0 and later) drops trust in them
+RUN apk add --no-cache --upgrade ca-certificates
 
 # Use production node environment
 ENV NODE_ENV=production
